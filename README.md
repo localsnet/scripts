@@ -1,2 +1,4 @@
-# scripts
-Shell / Python scripts
+# scripts 
+Shell / Python scripts / one-liners on:
+* Docker
+* will continue
