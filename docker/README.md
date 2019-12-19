@@ -4,4 +4,4 @@
 Make image based on container.\
 Script with required `<container_name_pattern> <tag>` (for creating image tag)  get container names and make images based on ones\
 Example: 
-  `./container2image.sh nginx 1:0`
+  `./container2image.sh my_nginx 1.0`
