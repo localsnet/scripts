@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  webserver1:
+    image: civi-dr:1.0
+    container_name: 'drupal_civicrm1'
+    restart: 'always'
+    ports:
+      - "8001:80"
+    networks:
+      - civicrm
+    depends_on:
+      - mariadb1
+    volumes:
+      - www:/var/www/html
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/vhosts:/etc/apache2/sites-enabled
+      - ./logs/apache2:/var/log/apache2
+  mariadb1:
+    image: mariadb:10.1
+    container_name: mariadb_drupal1
+    volumes:
+      - ./data/db:/docker-entrypoint-initdb.d
+      - ./data/db/config.cnf:/etc/mysql/conf.d/config.cnf
+      - ./data/db/var:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - civicrm
+    ports:
+      - 127.0.0.1:33061:3306
+networks:
+  civicrm:
+    external: true
+volumes:
+  www:

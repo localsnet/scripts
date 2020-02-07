@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  webserver3:
+    image: civi-wp:1.0
+    container_name: 'wp_cv'
+    restart: 'always'
+    ports:
+      - "8003:80"
+      - "44303:443"
+    networks:
+      - civicrm
+    depends_on:
+      - mariadb3
+    volumes:
+      - www:/var/www/html
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/vhosts:/etc/apache2/sites-enabled
+      - ./logs/apache2:/var/log/apache2
+  mariadb3:
+    image: mariadb:10.1
+    container_name: mariadb3
+    volumes:
+      - ./data/db:/docker-entrypoint-initdb.d
+      - ./data/db/config.cnf:/etc/mysql/conf.d/config.cnf
+      - ./data/db/var:/var/lib/mysql
+      - ./logs/mariadb:/var/log/mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - civicrm
+    ports:
+      - 127.0.0.1:33063:3306
+
+networks:
+  civicrm:
+    external: true
+volumes:
+  www:
